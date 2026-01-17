@@ -1,9 +1,21 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
-<link rel="manifest" href="manifest.json">
+<!doctype html>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta
+  name="theme-color"
+  content="#ffffff"
+  media="(prefers-color-scheme: light)"
+/>
+<meta
+  name="theme-color"
+  content="#000000"
+  media="(prefers-color-scheme: dark)"
+/>
+<meta
+  http-equiv="Content-Security-Policy"
+  content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
+/>
+<link rel="manifest" href="manifest.json" />
 <title>Textarea</title>
 <style>
   * {
@@ -117,7 +129,10 @@
     border-radius: 50%;
     border: none;
     bottom: 15px;
-    box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, .12);
+    box-shadow:
+      0 3px 5px -1px rgba(0, 0, 0, 0.2),
+      0 6px 10px 0 rgba(0, 0, 0, 0.14),
+      0 1px 18px 0 rgba(0, 0, 0, 0.12);
     color: #fff;
     cursor: pointer;
     display: grid;
@@ -132,7 +147,7 @@
     right: 15px;
     text-decoration: none;
     touch-action: manipulation;
-    transition: background-color .3s ease-out;
+    transition: background-color 0.3s ease-out;
     user-select: none;
     z-index: 1;
   }
@@ -141,7 +156,10 @@
     #button:hover {
       color: #fff;
       background-color: #3c86f3;
-      box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2), 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 2px rgba(0, 0, 0, .12);
+      box-shadow:
+        0 5px 5px -3px rgba(0, 0, 0, 0.2),
+        0 8px 10px 1px rgba(0, 0, 0, 0.14),
+        0 3px 14px 2px rgba(0, 0, 0, 0.12);
     }
   }
 
@@ -176,7 +194,9 @@
     position: fixed;
     right: 16px;
     bottom: 77px;
-    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.10), 0 15px 12px rgba(0, 0, 0, 0.05);
+    box-shadow:
+      0 19px 38px rgba(0, 0, 0, 0.1),
+      0 15px 12px rgba(0, 0, 0, 0.05);
     background: var(--elevated);
     backdrop-filter: blur(10px);
     border-radius: 10px;
@@ -264,9 +284,16 @@
 </style>
 <article contenteditable="plaintext-only" spellcheck autofocus></article>
 <button id="button" class="noprint">
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
-       stroke="currentColor"
-       stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
     <circle cx="12" cy="12" r="1"></circle>
     <circle cx="12" cy="5" r="1"></circle>
     <circle cx="12" cy="19" r="1"></circle>
@@ -303,7 +330,12 @@
     </svg>
     Save as TEXT
   </a>
-  <a class="item" href="https://github.com/antonmedv/textarea" target="_blank" role="menuitem">
+  <a
+    class="item"
+    href="https://github.com/antonmedv/textarea"
+    target="_blank"
+    role="menuitem"
+  >
     <svg aria-hidden="true" focusable="false" width="22" height="22">
       <use xlink:href="#icon-github"></use>
     </svg>
@@ -318,13 +350,16 @@
   const editor = new Editor(article, parseMarkdown)
   article.addEventListener('input', debounce(500, save))
   article.addEventListener('blur', save)
-  article.addEventListener('click', event => {
-    if (event.target.tagName === 'A') window.open(event.target.getAttribute('href'), '_blank')
+  article.addEventListener('click', (event) => {
+    if (event.target.tagName === 'A')
+      window.open(event.target.getAttribute('href'), '_blank')
   })
   addEventListener('DOMContentLoaded', load)
   addEventListener('hashchange', load)
-  addEventListener('load', () => new MutationObserver(save).observe(article, {attributeFilter: ['style']}))
-  addEventListener('keydown', e => {
+  addEventListener('load', () =>
+    new MutationObserver(save).observe(article, { attributeFilter: ['style'] })
+  )
+  addEventListener('keydown', (e) => {
     if ((e.metaKey || e.ctrlKey) && e.code === 'KeyS') {
       e.preventDefault()
       downloadHTML()
@@ -334,18 +369,49 @@
     navigator.serviceWorker.register('sw.js')
   }
 
-  console.log('%cGitHub https://github.com/antonmedv/textarea', 'font-size: 16px; border: 1px solid lightblue; border-radius: 12px; padding: 10px 14px; ')
+  console.log(
+    '%cGitHub https://github.com/antonmedv/textarea',
+    'font-size: 16px; border: 1px solid lightblue; border-radius: 12px; padding: 10px 14px; '
+  )
+
+  function sanitizeHash(hash) {
+    // Rimuove caratteri potenzialmente pericolosi
+    if (!hash) return ''
+    // Accetta solo caratteri base64url validi
+    const cleaned = hash.replace(/[^A-Za-z0-9_-]/g, '')
+    // Limita la lunghezza massima per prevenire DoS
+    const maxLength = 100000
+    return cleaned.substring(0, maxLength)
+  }
+
+  function isValidHash(hash) {
+    if (!hash || hash.length === 0) return false
+    // Verifica che contenga solo caratteri base64url validi
+    return /^[A-Za-z0-9_-]+$/.test(hash)
+  }
 
   async function load() {
     try {
-      if (location.hash !== '') await set(location.hash)
-      else {
-        await set(localStorage.getItem('hash') ?? '')
-        if (article.textContent) history.replaceState({}, '', await get())
+      if (location.hash !== '') {
+        const hash = location.hash.substring(1)
+        if (isValidHash(hash)) {
+          await set('#' + sanitizeHash(hash))
+        } else {
+          throw new Error('Invalid hash format')
+        }
+      } else {
+        const storedHash = localStorage.getItem('hash') ?? ''
+        if (storedHash && isValidHash(storedHash.substring(1))) {
+          await set(storedHash)
+          if (article.textContent) history.replaceState({}, '', await get())
+        }
       }
     } catch (e) {
+      console.error('Error loading content:', e)
       article.textContent = ''
       article.removeAttribute('style')
+      // Pulisce l'hash non valido
+      history.replaceState({}, '', location.pathname)
     }
     updateTitle()
   }
@@ -355,22 +421,33 @@
     if (location.hash !== hash) history.replaceState({}, '', hash)
     try {
       localStorage.setItem('hash', hash)
-    } catch (e) {
-    }
+    } catch (e) {}
     updateTitle()
   }
 
   async function set(hash) {
     if (!hash) return
-    const [content, style] = (await decompress(hash.slice(1))).split('\x00')
-    editor.set(content)
-    if (style) article.setAttribute('style', style)
+    const decompressed = await decompress(hash.slice(1))
+    const [content, style] = decompressed.split('\x00')
+
+    // Sanitizza il contenuto per prevenire XSS
+    const sanitizedContent = content || ''
+    editor.set(sanitizedContent)
+
+    // Sanitizza lo stile per prevenire injection CSS
+    if (style) {
+      const sanitizedStyle = style.replace(/[<>"']/g, '')
+      // Verifica che lo stile non contenga URL o JavaScript
+      if (!sanitizedStyle.match(/url\(|javascript:/i)) {
+        article.setAttribute('style', sanitizedStyle)
+      }
+    }
   }
 
   async function get() {
     const style = article.getAttribute('style')
     const content = article.textContent + (style !== null ? '\x00' + style : '')
-    return '#' + await compress(content)
+    return '#' + (await compress(content))
   }
 
   function updateTitle() {
@@ -385,11 +462,11 @@
     writer.write(byteArray)
     writer.close()
     const buffer = await new Response(stream.readable).arrayBuffer()
-    return new Uint8Array(buffer).toBase64({alphabet: 'base64url'})
+    return new Uint8Array(buffer).toBase64({ alphabet: 'base64url' })
   }
 
   async function decompress(b64) {
-    const byteArray = Uint8Array.fromBase64(b64, {alphabet: 'base64url'})
+    const byteArray = Uint8Array.fromBase64(b64, { alphabet: 'base64url' })
     const stream = new DecompressionStream('deflate-raw')
     const writer = stream.writable.getWriter()
     writer.write(byteArray)
@@ -409,8 +486,8 @@
   async function downloadHTML() {
     updateTitle()
     const doc = document.documentElement.cloneNode(true)
-    doc.querySelectorAll('script').forEach(s => s.remove())
-    doc.querySelectorAll('.noprint').forEach(s => s.remove())
+    doc.querySelectorAll('script').forEach((s) => s.remove())
+    doc.querySelectorAll('.noprint').forEach((s) => s.remove())
     doc.querySelector('article').removeAttribute('contenteditable')
     const html = '<!DOCTYPE html>\n' + doc.outerHTML
 
@@ -418,10 +495,12 @@
       try {
         const handle = await showSaveFilePicker({
           suggestedName: document.title + '.html',
-          types: [{
-            description: 'HTML file',
-            accept: {'text/html': ['.html']},
-          }],
+          types: [
+            {
+              description: 'HTML file',
+              accept: { 'text/html': ['.html'] },
+            },
+          ],
         })
         const writable = await handle.createWritable()
         await writable.write(html)
@@ -432,7 +511,7 @@
       }
     }
 
-    const blob = new Blob([html], {type: 'text/html'})
+    const blob = new Blob([html], { type: 'text/html' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
@@ -449,10 +528,12 @@
       try {
         const handle = await showSaveFilePicker({
           suggestedName: document.title + '.txt',
-          types: [{
-            description: 'TEXT file',
-            accept: {'text/plain': ['.txt']},
-          }],
+          types: [
+            {
+              description: 'TEXT file',
+              accept: { 'text/plain': ['.txt'] },
+            },
+          ],
         })
         const writable = await handle.createWritable()
         await writable.write(text)
@@ -463,7 +544,7 @@
       }
     }
 
-    const blob = new Blob([text], {type: 'text/plain'})
+    const blob = new Blob([text], { type: 'text/plain' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
@@ -477,21 +558,21 @@
     const frag = document.createDocumentFragment()
 
     const matchers = [
-      {name: 'md-codeblock', re: /```[^\n]*\n[\s\S]*?\n```/y},
-      {name: 'md-codeblock', re: /~~~[^\n]*\n[\s\S]*?\n~~~/y},
-      {name: 'md-h1', re: /^#[ \t]+[^\n]*$/my},
-      {name: 'md-h2', re: /^##[ \t]+[^\n]*$/my},
-      {name: 'md-h3', re: /^###[ \t]+[^\n]*$/my},
-      {name: 'md-h4', re: /^####[ \t]+[^\n]*$/my},
-      {name: 'md-h5', re: /^#####[ \t]+[^\n]*$/my},
-      {name: 'md-h6', re: /^######[ \t]+[^\n]*$/my},
-      {name: 'md-code', re: /`[^`\n]*`/y},
-      {name: 'md-bold', re: /\*\*[^*\n]+?\*\*/y},
-      {name: 'md-bold', re: /__[^_\n]+?__/y},
-      {name: 'md-strike', re: /~~[^~\n]+?~~/y},
-      {name: 'md-italic', re: /\*[^*\n]+?\*/y},
-      {name: 'md-italic', re: /_[^_\n]+?_/y},
-      {name: 'md-url', re: /https?:\/\/[^\s<>()\[\]{}"'`]+/y},
+      { name: 'md-codeblock', re: /```[^\n]*\n[\s\S]*?\n```/y },
+      { name: 'md-codeblock', re: /~~~[^\n]*\n[\s\S]*?\n~~~/y },
+      { name: 'md-h1', re: /^#[ \t]+[^\n]*$/my },
+      { name: 'md-h2', re: /^##[ \t]+[^\n]*$/my },
+      { name: 'md-h3', re: /^###[ \t]+[^\n]*$/my },
+      { name: 'md-h4', re: /^####[ \t]+[^\n]*$/my },
+      { name: 'md-h5', re: /^#####[ \t]+[^\n]*$/my },
+      { name: 'md-h6', re: /^######[ \t]+[^\n]*$/my },
+      { name: 'md-code', re: /`[^`\n]*`/y },
+      { name: 'md-bold', re: /\*\*[^*\n]+?\*\*/y },
+      { name: 'md-bold', re: /__[^_\n]+?__/y },
+      { name: 'md-strike', re: /~~[^~\n]+?~~/y },
+      { name: 'md-italic', re: /\*[^*\n]+?\*/y },
+      { name: 'md-italic', re: /_[^_\n]+?_/y },
+      { name: 'md-url', re: /https?:\/\/[^\s<>()\[\]{}"'`]+/y },
     ]
 
     const specials = ['`', '~', '*', '#', '_', 'h']
@@ -555,7 +636,7 @@
     const saveAsHTML = document.querySelector('#save-as-html')
     const saveAsText = document.querySelector('#save-as-text')
 
-    button.addEventListener('click', event => {
+    button.addEventListener('click', (event) => {
       if (event.clientX || event.targetTouches) ripple(event)
       menu.classList.toggle('visible')
       qr.setAttribute('href', '/qr' + location.hash)
@@ -573,7 +654,7 @@
       setTimeout(() => notification.classList.remove('visible'), 2e3)
     }
 
-    document.body.addEventListener('click', event => {
+    document.body.addEventListener('click', (event) => {
       let t = event.target
       if (t.closest('#menu')) return
       if (t.closest('#button')) return
@@ -581,22 +662,29 @@
       menu.classList.remove('visible')
     })
 
-    shareLink.addEventListener('click', event => {
+    shareLink.addEventListener('click', (event) => {
       event.preventDefault()
       if (!navigator.clipboard) {
         alert('Your browser does not support clipboard API')
         return
       }
-      navigator.clipboard.writeText(location.href)
-      notify('Link copied')
+      // Valida l'URL prima di copiarlo
+      const url = new URL(location.href)
+      const hash = url.hash.substring(1)
+      if (hash && isValidHash(hash)) {
+        navigator.clipboard.writeText(location.href)
+        notify('Link copied')
+      } else {
+        notify('Invalid link')
+      }
       hideMenu()
     })
-    saveAsHTML.addEventListener('click', event => {
+    saveAsHTML.addEventListener('click', (event) => {
       event.preventDefault()
       downloadHTML()
       hideMenu()
     })
-    saveAsText.addEventListener('click', event => {
+    saveAsText.addEventListener('click', (event) => {
       event.preventDefault()
       downloadTXT()
       hideMenu()
@@ -620,7 +708,8 @@
   function Editor(element, highlight) {
     const listeners = []
     const history = []
-    let at = -1, prev
+    let at = -1,
+      prev
 
     const debounceHighlight = debounce(30, () => {
       const pos = save()
@@ -629,11 +718,14 @@
     })
 
     const shouldRecord = (event) => {
-      return !isUndo(event) && !isRedo(event)
-        && event.key !== 'Meta'
-        && event.key !== 'Control'
-        && event.key !== 'Alt'
-        && !event.key.startsWith('Arrow')
+      return (
+        !isUndo(event) &&
+        !isRedo(event) &&
+        event.key !== 'Meta' &&
+        event.key !== 'Control' &&
+        event.key !== 'Alt' &&
+        !event.key.startsWith('Arrow')
+      )
     }
 
     let recording = false
@@ -648,7 +740,7 @@
       listeners.push([type, fn])
       element.addEventListener(type, fn)
     }
-    on('keydown', event => {
+    on('keydown', (event) => {
       if (event.defaultPrevented) return
       prev = toString()
       if (isUndo(event)) doUndo(event)
@@ -658,7 +750,7 @@
         recording = true
       }
     })
-    on('keyup', event => {
+    on('keyup', (event) => {
       if (event.defaultPrevented) return
       if (event.isComposing) return
       if (prev !== toString()) debounceHighlight()
@@ -666,20 +758,26 @@
     })
     on('paste', () => setTimeout(recordHistory, 10))
     on('cut', () => setTimeout(recordHistory, 10))
-    on('beforeinput', event => {
+    on('beforeinput', (event) => {
       if (event.inputType === 'historyUndo') doUndo(event)
       if (event.inputType === 'historyRedo') doRedo(event)
     })
 
     function save() {
       const s = getSelection()
-      const pos = {start: 0, end: 0, dir: undefined}
-      let {anchorNode, anchorOffset, focusNode, focusOffset} = s
+      const pos = { start: 0, end: 0, dir: undefined }
+      let { anchorNode, anchorOffset, focusNode, focusOffset } = s
       if (!anchorNode || !focusNode) throw 'error1'
       if (anchorNode === element && focusNode === element) {
-        pos.start = (anchorOffset > 0 && element.textContent) ? element.textContent.length : 0
-        pos.end = (focusOffset > 0 && element.textContent) ? element.textContent.length : 0
-        pos.dir = (focusOffset >= anchorOffset) ? '->' : '<-'
+        pos.start =
+          anchorOffset > 0 && element.textContent
+            ? element.textContent.length
+            : 0
+        pos.end =
+          focusOffset > 0 && element.textContent
+            ? element.textContent.length
+            : 0
+        pos.dir = focusOffset >= anchorOffset ? '->' : '<-'
         return pos
       }
       if (anchorNode.nodeType === Node.ELEMENT_NODE) {
@@ -694,7 +792,7 @@
         focusNode = node
         focusOffset = 0
       }
-      visit(element, el => {
+      visit(element, (el) => {
         if (el === anchorNode && el === focusNode) {
           pos.start += anchorOffset
           pos.end += focusOffset
@@ -728,22 +826,24 @@
 
     function restore(pos) {
       const s = getSelection()
-      let startNode, startOffset = 0
-      let endNode, endOffset = 0
+      let startNode,
+        startOffset = 0
+      let endNode,
+        endOffset = 0
 
       if (!pos.dir) pos.dir = '->'
       if (pos.start < 0) pos.start = 0
       if (pos.end < 0) pos.end = 0
 
       if (pos.dir === '<-') {
-        const {start, end} = pos
+        const { start, end } = pos
         pos.start = end
         pos.end = start
       }
 
       let current = 0
 
-      visit(element, el => {
+      visit(element, (el) => {
         if (el.nodeType !== Node.TEXT_NODE) return
 
         const len = (el.nodeValue || '').length
@@ -771,7 +871,12 @@
       }
 
       if (pos.dir === '<-') {
-        [startNode, startOffset, endNode, endOffset] = [endNode, endOffset, startNode, startOffset]
+        ;[startNode, startOffset, endNode, endOffset] = [
+          endNode,
+          endOffset,
+          startNode,
+          startOffset,
+        ]
       }
 
       {
@@ -833,13 +938,14 @@
       const pos = save()
       const lastRecord = history[at]
       if (
-        lastRecord
-        && lastRecord.html === html
-        && lastRecord.pos.start === pos.start
-        && lastRecord.pos.end === pos.end
-      ) return
+        lastRecord &&
+        lastRecord.html === html &&
+        lastRecord.pos.start === pos.start &&
+        lastRecord.pos.end === pos.end
+      )
+        return
       at++
-      history[at] = {html, pos}
+      history[at] = { html, pos }
       history.splice(at + 1)
       const maxHistory = 10_000
       if (at > maxHistory) {
@@ -896,42 +1002,78 @@
   }
 </script>
 <svg style="display: none" aria-hidden="true" focusable="false">
-  <symbol id="icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"
-          class="icon icon-tabler icons-tabler-outline icon-tabler-plus">
-    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-    <path d="M12 5l0 14"/>
-    <path d="M5 12l14 0"/>
+  <symbol
+    id="icon-plus"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.25"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="icon icon-tabler icons-tabler-outline icon-tabler-plus"
+  >
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <path d="M12 5l0 14" />
+    <path d="M5 12l14 0" />
   </symbol>
-  <symbol id="icon-share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25"
-          stroke-linecap="round"
-          stroke-linejoin="round">
-    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-    <path d="M8 9h-1a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-8a2 2 0 0 0 -2 -2h-1"/>
-    <path d="M12 14v-11"/>
-    <path d="M9 6l3 -3l3 3"/>
-  </symbol>
-  <symbol id="icon-qrcode" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
-    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-    <path d="M4 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4"/>
-    <path d="M7 17l0 .01"/>
-    <path d="M14 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4"/>
-    <path d="M7 7l0 .01"/>
-    <path d="M4 15a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4"/>
-    <path d="M17 7l0 .01"/>
-    <path d="M14 14l3 0"/>
-    <path d="M20 14l0 .01"/>
-    <path d="M14 14l0 3"/>
-    <path d="M14 20l3 0"/>
-    <path d="M17 17l3 0"/>
-    <path d="M20 17l0 3"/>
-  </symbol>
-  <symbol id="icon-github" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-          stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
-    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <symbol
+    id="icon-share"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.25"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
     <path
-      d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"/>
+      d="M8 9h-1a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-8a2 2 0 0 0 -2 -2h-1"
+    />
+    <path d="M12 14v-11" />
+    <path d="M9 6l3 -3l3 3" />
+  </symbol>
+  <symbol
+    id="icon-qrcode"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.25"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <path
+      d="M4 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4"
+    />
+    <path d="M7 17l0 .01" />
+    <path
+      d="M14 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4"
+    />
+    <path d="M7 7l0 .01" />
+    <path
+      d="M4 15a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v4a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -4"
+    />
+    <path d="M17 7l0 .01" />
+    <path d="M14 14l3 0" />
+    <path d="M20 14l0 .01" />
+    <path d="M14 14l0 3" />
+    <path d="M14 20l3 0" />
+    <path d="M17 17l3 0" />
+    <path d="M20 17l0 3" />
+  </symbol>
+  <symbol
+    id="icon-github"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.25"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+    <path
+      d="M9 19c-4.3 1.4 -4.3 -2.5 -6 -3m12 5v-3.5c0 -1 .1 -1.4 -.5 -2c2.8 -.3 5.5 -1.4 5.5 -6a4.6 4.6 0 0 0 -1.3 -3.2a4.2 4.2 0 0 0 -.1 -3.2s-1.1 -.3 -3.5 1.3a12.3 12.3 0 0 0 -6.2 0c-2.4 -1.6 -3.5 -1.3 -3.5 -1.3a4.2 4.2 0 0 0 -.1 3.2a4.6 4.6 0 0 0 -1.3 3.2c0 4.6 2.7 5.7 5.5 6c-.6 .6 -.6 1.2 -.5 2v3.5"
+    />
   </symbol>
   <symbol id="icon-empty" viewBox="0 0 24 24"></symbol>
 </svg>
