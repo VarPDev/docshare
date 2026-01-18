@@ -1,4 +1,6 @@
 {
-  "cleanUrls": true,
-  "trailingSlash": false
+  "rewrites": [
+    { "source": "/qr", "destination": "/qr.html" },
+    { "source": "/qr.html", "destination": "/qr.html" }
+  ]
 }
