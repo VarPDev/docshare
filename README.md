@@ -28,7 +28,7 @@ A _minimalist_ text editor that lives entirely in your browser and stores everyt
 
 ## Related
 
-- [wiki](https://github.com/antonmedv/wiki) – a single file Wiki engine based on textarea.my
+- [wiki](https://github.com/VarPDev/docshare) – a single file Wiki engine based on textarea.my
 
 ---
 
