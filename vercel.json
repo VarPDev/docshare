@@ -1,6 +1,3 @@
 {
-  "rewrites": [
-    { "source": "/qr", "destination": "/qr.html" },
-    { "source": "/qr.html", "destination": "/qr.html" }
-  ]
+  "cleanUrls": true
 }
